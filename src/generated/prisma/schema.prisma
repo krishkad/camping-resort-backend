@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum FoodPreference {
+  Veg
+  Non_Veg
+}
+
+enum CheckInStatus {
+  NotCheckedIn
+  CheckedIn
+  CheckedOut
+}
+
+enum BookingStatus {
+  Pending
+  Confirmed
+  Cancelled
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+  Failed
+}
+
+enum RoomType {
+  Standard
+  Deluxe
+  Suite
+}
+
+model Booking {
+  id              String         @id @default(uuid())
+  clientName      String
+  email           String
+  phoneNumber     String
+  foodPreference  FoodPreference
+  checkInDate     DateTime
+  checkOutDate    DateTime
+  checkInStatus   CheckInStatus
+  bookingStatus   BookingStatus
+  paymentStatus   PaymentStatus
+  amount          Float
+  roomType        RoomType
+  roomNumber      String?
+  numberOfAdults  Int
+  numberOfKids    Int
+  specialRequests String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
