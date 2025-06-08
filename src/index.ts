@@ -21,6 +21,11 @@ app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/holiday", holidayRoute);
 
+
+app.get("/", (req,res) => {
+  res.json("welcome")
+})
+
 app.get("/", (req, res) => {
   const response: {
     success: boolean;
