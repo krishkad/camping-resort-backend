@@ -38,8 +38,8 @@ app.get("/", (req, res) => {
   res.json(response);
 });
 
-// export default app;
+export default app;
 
-app.listen(PORT, () => {
-  console.log(`server is running on port: ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`server is running on port: ${PORT}`);
+// });
