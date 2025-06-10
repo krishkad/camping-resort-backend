@@ -207,7 +207,7 @@ router.post("/login", async (req, res) => {
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: "lax",
     });
 
     res.status(200).json({ success: true, data: userWithoutPassword });
