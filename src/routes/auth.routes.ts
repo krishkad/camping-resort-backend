@@ -207,15 +207,11 @@ router.post("/login", async (req, res) => {
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
-      sameSite: process.env.PRODUCTION_ENV === "production" ? "none" : "lax",
+      sameSite: "none",
       path: "/",
-      domain:
-        process.env.PRODUCTION_ENV === "production"
-          ? "camping-resort.vercel.app"
-          : undefined,
-      maxAge: 24 * 60 * 60 * 1000,
-      priority: "high",
     });
+
+    res.setHeader("authtoken", token);
 
     console.log("token:", token);
 
