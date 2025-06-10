@@ -205,7 +205,7 @@ router.post("/login", async (req, res) => {
     console.log(process.env.PRODUCTION_ENV === "production");
     const domain =
       process.env.PRODUCTION_ENV === "production"
-        ? "https://camping-resort.vercel.app/"
+        ? "camping-resort.vercel.app"
         : undefined;
 
     res.cookie("authtoken", token, {
