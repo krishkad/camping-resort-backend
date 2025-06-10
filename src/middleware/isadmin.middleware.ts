@@ -12,7 +12,7 @@ interface MyJwtPayload extends jwt.JwtPayload {
 
 
 const isAdminVerify = (req: any, res: Response, next: NextFunction) => {
-  const token = req.headers["authtoken"];
+  const token = req.cookies.authtoken
 
   if (!token) {
     res.status(400).json({ success: false, message: "Invalid credentials" });

@@ -3,6 +3,9 @@ import prisma from "../prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import validator from "email-validator";
+import disposableDomains from "disposable-email-domains";
+import disposableEmailDetector from "disposable-email-detector";
 
 dotenv.config();
 
@@ -24,6 +27,45 @@ interface ResponseType {
 }
 
 const router: express.Router = express.Router();
+
+// VEERIFY EMAIL ROUTE
+router.post("/verify-email", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!validator.validate(email)) {
+      res.status(400).json({ success: false, message: "Invalid email format" });
+      return;
+    }
+
+    // Check for disposable email
+    const emailDomain = email.split("@")[1].toLowerCase();
+    if (
+      disposableDomains.includes(emailDomain) ||
+      emailDomain !== "gmail.com"
+    ) {
+      res.status(400).json({
+        success: false,
+        message: "Only g-mail addresses are allowed",
+      });
+      return;
+    }
+    const isDisposableEmail = await disposableEmailDetector(email);
+
+    if (isDisposableEmail) {
+      res.status(400).json({
+        success: false,
+        message: "Disposable email addresses are not allowed",
+      });
+      return;
+    }
+
+    res.status(201).json({ success: true, message: "ok" });
+  } catch (error: any) {
+    console.log("error while verifing email: ", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
 
 // CREATE USER ROUTE
 router.post(
@@ -161,12 +203,34 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(tokenData, process.env.JWT_SECRET!);
 
-    res.cookie("authtoken", token);
+    res.cookie("authtoken", token, {
+      httpOnly: true,
+    });
 
     res.status(200).json({ success: true, data: userWithoutPassword });
   } catch (error: any) {
     console.log("Error login: ", error);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+// LOG OUT ROUTE
+router.get("/log-out", (req, res) => {
+  try {
+    res.clearCookie("authtoken", {
+      path: "/", // ✅ ensure the path matches the one used when setting the cookie
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Successfully logged out",
+    });
+  } catch (error: any) {
+    console.error("Logout Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Logout failed",
+    });
   }
 });
 

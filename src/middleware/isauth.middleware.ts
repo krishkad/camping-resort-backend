@@ -11,7 +11,7 @@ interface MyJwtPayload extends JwtPayload {
 }
 
 const isAuthVerify = async (req: any, res: Response, next: NextFunction) => {
-  const token = req.headers["authtoken"];
+  const token = req.cookies.authtoken;
 
   if (!token) {
     res.status(400).json({ success: false, message: "not authorized" });
@@ -37,6 +37,5 @@ const isAuthVerify = async (req: any, res: Response, next: NextFunction) => {
   req.data = req.body;
   next();
 };
-
 
 export default isAuthVerify;
