@@ -202,12 +202,13 @@ router.post("/login", async (req, res) => {
     };
 
     const token = jwt.sign(tokenData, process.env.JWT_SECRET!);
+    console.log(process.env.PRODUCTION_ENV) 
 
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
-      sameSite: process.env.PRODUCTION_ENV === "production" ? "none" : "lax", // ✅ Required for cross-site cookies in production
       path: "/", // ✅ Ensures the cookie is available across your app
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({ success: true, data: userWithoutPassword });
