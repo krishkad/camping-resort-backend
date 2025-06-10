@@ -203,14 +203,19 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(tokenData, process.env.JWT_SECRET!);
     console.log(process.env.PRODUCTION_ENV === "production");
+    const domain =
+      process.env.PRODUCTION_ENV === "production"
+        ? "https://camping-resort.vercel.app/"
+        : undefined;
 
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
       sameSite: process.env.PRODUCTION_ENV === "production" ? "none" : "lax",
+      domain,
+
       path: "/",
     });
-
 
     console.log("token:", token);
 
