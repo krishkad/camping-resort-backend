@@ -204,12 +204,7 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(tokenData, process.env.JWT_SECRET!);
     console.log(process.env.PRODUCTION_ENV === "production");
 
-    res.cookie("authtoken", token, {
-      httpOnly: true,
-      secure: process.env.PRODUCTION_ENV === "production",
-      sameSite: "none",
-      domain: "camping-resort.vercel.app"
-    });
+    res.cookie("authtoken", token);
 
     res.status(200).json({ success: true, data: userWithoutPassword });
   } catch (error: any) {
