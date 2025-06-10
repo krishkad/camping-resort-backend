@@ -207,7 +207,7 @@ router.post("/login", async (req, res) => {
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       domain: "camping-resort.vercel.app"
     });
 
