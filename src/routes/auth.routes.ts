@@ -206,6 +206,8 @@ router.post("/login", async (req, res) => {
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
+      sameSite: process.env.PRODUCTION_ENV === "production" ? "none" : "lax", // ✅ Required for cross-site cookies in production
+      path: "/", // ✅ Ensures the cookie is available across your app
     });
 
     res.status(200).json({ success: true, data: userWithoutPassword });
