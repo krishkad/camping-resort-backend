@@ -207,11 +207,10 @@ router.post("/login", async (req, res) => {
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
-      sameSite: "none",
+      sameSite: process.env.PRODUCTION_ENV === "production" ? "none" : "lax",
       path: "/",
     });
 
-    res.setHeader("authtoken", token);
 
     console.log("token:", token);
 
