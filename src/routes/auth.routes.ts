@@ -208,8 +208,6 @@ router.post("/login", async (req, res) => {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      path: "/", // ✅ Ensures the cookie is available across your app
-      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({ success: true, data: userWithoutPassword });
