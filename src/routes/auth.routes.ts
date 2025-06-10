@@ -202,11 +202,12 @@ router.post("/login", async (req, res) => {
     };
 
     const token = jwt.sign(tokenData, process.env.JWT_SECRET!);
-    console.log(process.env.PRODUCTION_ENV) 
+    console.log(process.env.PRODUCTION_ENV);
 
     res.cookie("authtoken", token, {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/", // ✅ Ensures the cookie is available across your app
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
