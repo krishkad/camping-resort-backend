@@ -208,6 +208,7 @@ router.post("/login", async (req, res) => {
       httpOnly: true,
       secure: process.env.PRODUCTION_ENV === "production",
       sameSite: "lax",
+      domain: "camping-resort.vercel.app"
     });
 
     res.status(200).json({ success: true, data: userWithoutPassword });
